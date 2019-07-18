@@ -142,7 +142,7 @@ func (h *Handler) Default(update tgbotapi.Update) error {
 
 		body += fmt.Sprintf(
 			"<b>Date:</b> <code>%s</code>",
-			time.Unix(int64(update.Message.ForwardDate), 0).String(),
+			time.Unix(int64(update.Message.ForwardDate), 0).UTC().String(),
 		)
 	} else {
 		if update.Message.From != nil {
@@ -173,7 +173,7 @@ func (h *Handler) Default(update tgbotapi.Update) error {
 
 		body += fmt.Sprintf(
 			"<b>Date:</b> <code>%s</code>",
-			time.Unix(int64(update.Message.Date), 0).String(),
+			time.Unix(int64(update.Message.Date), 0).UTC().String(),
 		)
 	}
 

@@ -13,8 +13,8 @@ import (
 
 type Handler struct {
 	Telegram *tgbotapi.BotAPI
-	Logger logrus.FieldLogger
-	Config *config.Config
+	Logger   logrus.FieldLogger
+	Config   *config.Config
 }
 
 func NewHandler(bot *tgbotapi.BotAPI, logger logrus.FieldLogger, conf *config.Config) *Handler {
@@ -184,7 +184,10 @@ func (h *Handler) Default(update tgbotapi.Update) error {
 	msg.ParseMode = "HTML"
 
 	if _, err := h.Telegram.Send(msg); err != nil {
-		return errors.Wrap(err, "cannot send message")
+		return tool.NewHRError(
+			"Cannot send message, maybe it's too long?",
+			errors.Wrap(err, "cannot send message"),
+		)
 	}
 
 	return nil

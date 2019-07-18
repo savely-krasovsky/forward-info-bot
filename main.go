@@ -13,7 +13,7 @@ import (
 
 func main() {
 	var (
-		path   string
+		path string
 	)
 
 	flag.StringVar(

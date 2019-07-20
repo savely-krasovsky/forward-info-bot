@@ -5,6 +5,7 @@ import (
 	"forward-info-bot/config"
 	"forward-info-bot/tool"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	"github.com/microcosm-cc/bluemonday"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"strings"
@@ -42,7 +43,7 @@ func (h *Handler) Default(update tgbotapi.Update) error {
 	body := ""
 
 	if update.Message.Text != "" {
-		body += fmt.Sprintf("<b>Message:</b> %s\n", update.Message.Text)
+		body += fmt.Sprintf("<b>Message:</b> %s\n", bluemonday.StrictPolicy().Sanitize(update.Message.Text))
 	} else {
 		body += "<b>Media Type:</b> "
 		switch {
@@ -76,7 +77,7 @@ func (h *Handler) Default(update tgbotapi.Update) error {
 		body += "\n"
 
 		if update.Message.Caption != "" {
-			body += fmt.Sprintf("<b>Caption:</b> %s\n", update.Message.Caption)
+			body += fmt.Sprintf("<b>Caption:</b> %s\n", bluemonday.StrictPolicy().Sanitize(update.Message.Caption))
 		}
 	}
 

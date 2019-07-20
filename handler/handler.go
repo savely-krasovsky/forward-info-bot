@@ -39,11 +39,20 @@ func (h *Handler) Start(update tgbotapi.Update) error {
 	return nil
 }
 
+func Sanitize(text string) string {
+	sanitized := bluemonday.StrictPolicy().Sanitize(text)
+	if sanitized == "" {
+		sanitized = "<code>Potentially dangerous message that could break bot's message formatting have hidden.</code>"
+	}
+
+	return sanitized
+}
+
 func (h *Handler) Default(update tgbotapi.Update) error {
 	body := ""
 
 	if update.Message.Text != "" {
-		body += fmt.Sprintf("<b>Message:</b> %s\n", bluemonday.StrictPolicy().Sanitize(update.Message.Text))
+		body += fmt.Sprintf("<b>Message:</b> %s\n", Sanitize(update.Message.Text))
 	} else {
 		body += "<b>Media Type:</b> "
 		switch {
@@ -77,7 +86,7 @@ func (h *Handler) Default(update tgbotapi.Update) error {
 		body += "\n"
 
 		if update.Message.Caption != "" {
-			body += fmt.Sprintf("<b>Caption:</b> %s\n", bluemonday.StrictPolicy().Sanitize(update.Message.Caption))
+			body += fmt.Sprintf("<b>Caption:</b> %s\n", Sanitize(update.Message.Caption))
 		}
 	}
 
